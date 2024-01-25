@@ -2215,18 +2215,6 @@ fn (mut p Parser) parse_multi_expr(is_top_level bool) ast.Stmt {
 	// TODO remove translated
 	if p.tok.kind in [.assign, .decl_assign] || p.tok.kind.is_assign() {
 		return p.partial_assign_stmt(left)
-	} else if !p.pref.translated && !p.is_translated && !p.pref.is_fmt && !p.pref.is_vet
-		&& tok.kind !in [.key_if, .key_match, .key_lock, .key_rlock, .key_select] {
-		for node in left {
-			if (is_top_level || p.tok.kind != .rcbr)
-				&& node !in [ast.CallExpr, ast.PostfixExpr, ast.ComptimeCall, ast.SelectorExpr, ast.DumpExpr] {
-				is_complex_infix_expr := node is ast.InfixExpr
-					&& node.op in [.left_shift, .right_shift, .unsigned_right_shift, .arrow]
-				if !is_complex_infix_expr {
-					return p.error_with_pos('expression evaluated but not used', node.pos())
-				}
-			}
-		}
 	}
 	pos.update_last_line(p.prev_tok.line_nr)
 	if left.len == 1 {

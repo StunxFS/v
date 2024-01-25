@@ -2078,13 +2078,9 @@ fn (mut c Checker) stmt(mut node ast.Stmt) {
 				else {}
 			}
 			if !c.pref.is_repl && (c.stmt_level == 1 || (c.stmt_level > 1 && !c.is_last_stmt)) {
-				if mut node.expr is ast.InfixExpr {
-					if node.expr.op == .left_shift {
-						left_sym := c.table.final_sym(node.expr.left_type)
-						if left_sym.kind != .array
-							&& c.table.final_sym(c.unwrap_generic(node.expr.left_type)).kind != .array {
-							c.error('unused expression', node.pos)
-						}
+				if !(node.expr is ast.PostfixExpr && node.expr.op in [.inc, .dec]) {
+					if c.expected_type == ast.void_type && node.typ != ast.void_type {
+						c.error("expression evaluated but not used", node.pos)
 					}
 				}
 			}
