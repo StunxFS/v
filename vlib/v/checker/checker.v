@@ -2012,6 +2012,10 @@ fn (mut c Checker) enum_decl(mut node ast.EnumDecl) {
 			}
 		}
 	}
+	enum_type := c.table.find_type_idx(node.name)
+	for t in node.implements_types {
+		c.type_implements(enum_type, t, node.pos)
+	}
 }
 
 fn (mut c Checker) check_enum_field_integer_literal(expr ast.IntegerLiteral, is_signed bool, is_multi_allowed bool,

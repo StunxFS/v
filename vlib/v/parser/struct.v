@@ -107,7 +107,7 @@ fn (mut p Parser) struct_decl(is_anon bool) ast.StructDecl {
 					typ: p.parse_type()
 					pos: type_pos
 				}
-				if p.tok.kind != .comma {
+				if p.tok.kind !in [.comma, .eof] {
 					break
 				}
 			}

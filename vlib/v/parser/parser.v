@@ -4170,6 +4170,18 @@ fn (mut p Parser) enum_decl() ast.EnumDecl {
 		enum_type = p.parse_type()
 	}
 	mut enum_decl_comments := p.eat_comments()
+	mut is_implements := false
+	mut implements_types := []ast.Type{cap: 3} // ast.void_type
+	if p.tok.kind == .key_implements {
+		is_implements = true
+		for {
+			p.next()
+			implements_types << p.parse_type()
+			if p.tok.kind !in [.comma, .eof] {
+				break
+			}
+		}
+	}
 	p.check(.lcbr)
 	enum_decl_comments << p.eat_comments()
 	senum_type := p.table.get_type_name(enum_type)
@@ -4339,6 +4351,8 @@ fn (mut p Parser) enum_decl() ast.EnumDecl {
 		pos:              start_pos.extend_with_last_line(end_pos, p.prev_tok.line_nr)
 		attrs:            p.attrs
 		comments:         enum_decl_comments
+		is_implements:    is_implements
+		implements_types: implements_types
 	}
 
 	p.table.register_enum_decl(enum_decl)

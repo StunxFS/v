@@ -1036,7 +1036,17 @@ pub fn (mut f Fmt) enum_decl(node ast.EnumDecl) {
 		f.writeln('enum ${name} {}\n')
 		return
 	}
-	f.writeln('enum ${name} {')
+	f.write('enum ${name}')
+	if node.is_implements {
+		f.write(' implements ')
+		for i, t in node.implements_types {
+			f.write(f.table.type_to_str_using_aliases(t, f.mod2alias))
+			if i < node.implements_types.len - 1 {
+				f.write(', ')
+			}
+		}
+	}
+	f.writeln(' {')
 	f.comments(node.comments, same_line: true, level: .indent)
 
 	mut value_align := new_field_align(use_break_line: true)
