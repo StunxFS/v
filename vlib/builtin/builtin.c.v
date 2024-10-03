@@ -4,6 +4,8 @@ module builtin
 pub type FnExitCb = fn ()
 
 fn C.atexit(f FnExitCb) int
+
+@[trusted]
 fn C.strerror(int) &char
 
 @[noreturn]

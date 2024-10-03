@@ -58,8 +58,6 @@ fn C.sscanf(str &char, const_format &char, opt ...voidptr) int
 fn C.scanf(const_format &char, opt ...voidptr) int
 
 fn C.puts(msg &char) int
-@[trusted]
-fn C.abs(f64) f64
 
 fn C.fputs(msg &char, fstream &C.FILE) int
 
@@ -205,9 +203,6 @@ fn C.strncasecmp(s &char, s2 &char, n int) int
 fn C.strcasecmp(s &char, s2 &char) int
 
 fn C.strncmp(s &char, s2 &char, n int) int
-
-@[trusted]
-fn C.strerror(int) &char
 
 @[trusted]
 fn C.WIFEXITED(status int) bool
