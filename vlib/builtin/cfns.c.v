@@ -192,8 +192,6 @@ fn C.toupper(c int) int
 @[trusted]
 fn C.isspace(c int) int
 
-fn C.strchr(s &char, c int) &char
-
 @[trusted]
 fn C.getchar() int
 

@@ -95,6 +95,12 @@ fn (mut c Checker) fn_decl(mut node ast.FnDecl) {
 			c.error('cannot redefine builtin public function `${node.short_name}`', node.pos)
 		}
 	}
+	if node.language != .v {
+		if pos := c.table.extern_funcs.add_extern_sym(node.name, node.name_pos) {
+			c.add_error_detail_with_pos('was previously defined here', pos)
+			c.error("external symbol definition `${node.name}` duplicate", node.name_pos)
+		}
+	}
 	if node.name == 'main.main' {
 		c.main_fn_decl_node = *node
 	}

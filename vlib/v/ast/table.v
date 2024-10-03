@@ -4,6 +4,7 @@
 @[has_globals]
 module ast
 
+import v.token
 import v.cflag
 import v.util
 
@@ -52,6 +53,30 @@ pub mut:
 	anon_struct_names  map[string]int // anon struct name -> struct sym idx
 	// counter for anon struct, avoid name conflicts.
 	anon_struct_counter int
+
+	extern_types ExternSymRegister
+	extern_funcs ExternSymRegister
+}
+
+struct ExternSymRegister {
+mut:
+	syms []ExternSym
+}
+
+pub fn (mut extern_sym_reg ExternSymRegister) add_extern_sym(name string, pos token.Pos) ?token.Pos {
+	for sym in extern_sym_reg.syms {
+		if sym.name == name {
+			return sym.pos
+		}
+	}
+	extern_sym_reg.syms << ExternSym{name, pos}
+	return none
+}
+
+pub struct ExternSym {
+pub:
+	name string
+	pos token.Pos
 }
 
 // used by vls to avoid leaks
