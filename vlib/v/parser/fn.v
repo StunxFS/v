@@ -1180,10 +1180,8 @@ fn (mut p Parser) fn_params() ([]ast.Param, bool, bool, bool) {
 						pos)
 					return []ast.Param{}, false, false, false
 				}
-				if typ.is_ptr() && p.table.sym(typ).kind == .struct {
+				if !typ.is_ptr() {
 					typ = typ.ref()
-				} else {
-					typ = typ.set_nr_muls(1)
 				}
 				if typ.has_flag(.option) {
 					typ = typ.set_flag(.option_mut_param_t)
