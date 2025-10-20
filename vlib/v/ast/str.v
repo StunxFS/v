@@ -179,7 +179,11 @@ fn (t &Table) stringify_fn_after_name(node &FnDecl, mut f strings.Builder, cur_m
 		if param.is_hidden {
 			continue
 		}
-		param_typ := if t.new_int_fmt_fix && param.typ == int_type { i32_type } else { param.typ }
+		mut param_typ := if t.new_int_fmt_fix && param.typ == int_type {
+			i32_type
+		} else {
+			param.typ
+		}
 		is_last_param := i == node.params.len - 1
 		is_type_only := param.name == ''
 		if param.on_newline {
@@ -218,6 +222,9 @@ fn (t &Table) stringify_fn_after_name(node &FnDecl, mut f strings.Builder, cur_m
 			}
 			f.write_string('}')
 		} else {
+			if param.is_mut && param.is_ptr_by_mut && param_typ.is_ptr() {
+				param_typ = param_typ.deref()
+			}
 			mut s := t.type_to_str(param_typ.clear_flag(.shared_f))
 			s = util.no_cur_mod(s, cur_mod)
 			s = shorten_full_name_based_on_aliases(s, m2a)

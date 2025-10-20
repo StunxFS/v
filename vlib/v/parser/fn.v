@@ -1162,6 +1162,7 @@ fn (mut p Parser) fn_params() ([]ast.Param, bool, bool, bool) {
 				// error is added in parse_type
 				return []ast.Param{}, false, false, false
 			}
+			mut is_ptr_by_mut := false
 			if is_mut {
 				if !typ.has_flag(.generic) {
 					if is_variadic {
@@ -1181,6 +1182,7 @@ fn (mut p Parser) fn_params() ([]ast.Param, bool, bool, bool) {
 					return []ast.Param{}, false, false, false
 				}
 				if !typ.is_ptr() {
+					is_ptr_by_mut = true
 					typ = typ.ref()
 				}
 				if typ.has_flag(.option) {
@@ -1203,14 +1205,15 @@ fn (mut p Parser) fn_params() ([]ast.Param, bool, bool, bool) {
 					p.check_for_impure_v(alanguage, type_pos[i])
 				}
 				params << ast.Param{
-					pos:        param_pos[i]
-					name:       para_name
-					is_mut:     is_mut
-					is_atomic:  is_atomic
-					is_shared:  is_shared
-					typ:        typ
-					type_pos:   type_pos[i]
-					on_newline: prev_param_newline != param_pos[i].line_nr
+					pos:           param_pos[i]
+					name:          para_name
+					is_mut:        is_mut
+					is_atomic:     is_atomic
+					is_shared:     is_shared
+					is_ptr_by_mut: is_ptr_by_mut
+					typ:           typ
+					type_pos:      type_pos[i]
+					on_newline:    prev_param_newline != param_pos[i].line_nr
 				}
 				prev_param_newline = param_pos[i].line_nr
 				// if typ.typ.kind == .variadic && p.tok.kind == .comma {
