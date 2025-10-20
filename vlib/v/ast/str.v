@@ -219,15 +219,6 @@ fn (t &Table) stringify_fn_after_name(node &FnDecl, mut f strings.Builder, cur_m
 			f.write_string('}')
 		} else {
 			mut s := t.type_to_str(param_typ.clear_flag(.shared_f))
-			if param.is_mut {
-				if s.starts_with('&') && ((!param_sym.is_number() && param_sym.kind != .bool)
-					|| node.language != .v
-					|| (param_typ.is_ptr() && param_sym.kind == .struct)) {
-					s = s[1..]
-				} else if param_typ.is_ptr() && param_sym.kind == .struct && !s.contains('[') {
-					s = t.type_to_str(param_typ.clear_flag(.shared_f).deref())
-				}
-			}
 			s = util.no_cur_mod(s, cur_mod)
 			s = shorten_full_name_based_on_aliases(s, m2a)
 			if !is_type_only {
