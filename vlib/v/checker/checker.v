@@ -2345,7 +2345,7 @@ fn (mut c Checker) stmt(mut node ast.Stmt) {
 							if node.expr.right.return_type.has_flag(.result) {
 								node.expr.right.or_block = node.expr.or_block
 								node.expr.right.or_block.err_used = node.expr.or_block.scope.known_var('err')
-								node.expr.or_block = ast.OrExpr{}
+								//node.expr.or_block = ast.OrExpr{}
 							}
 						}
 					}
