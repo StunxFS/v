@@ -90,7 +90,7 @@ fn (mut g Gen) infix_expr_arrow_op(node ast.InfixExpr) {
 	}
 	g.write(')')
 	if gen_or {
-		g.or_block(tmp_opt, node.or_block, ast.void_type)
+		g.or_block(tmp_opt, node.or_block, ast.ovoid_type)
 	}
 }
 
