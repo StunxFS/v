@@ -2423,6 +2423,10 @@ fn (mut c Checker) defer_stmt(mut node ast.DeferStmt) {
 		node.idx_in_fn = c.table.cur_fn.defer_stmts.len
 		c.table.cur_fn.defer_stmts << unsafe { &node }
 	}
+	if !isnil(c.fn_scope) && node.mode == .function && node.scope == c.fn_scope {
+		c.warn('`defer(fn) {` is not necessary, it is already inside function scope. Use `defer {` instead.',
+			node.pos)
+	}
 	if c.locked_names.len != 0 || c.rlocked_names.len != 0 {
 		c.error('defers are not allowed in lock statements', node.pos)
 	}
