@@ -919,6 +919,7 @@ pub:
 	is_autofree_tmp bool
 	is_inherited    bool
 	has_inherited   bool
+	scope           &Scope = unsafe { nil }
 pub mut:
 	is_arg        bool // fn args should not be autofreed
 	is_auto_deref bool
@@ -1558,10 +1559,10 @@ pub enum DeferMode {
 @[minify]
 pub struct DeferStmt {
 pub:
-	pos   token.Pos
-	scope &Scope
-	mode  DeferMode
+	pos  token.Pos
+	mode DeferMode
 pub mut:
+	scope      &Scope = unsafe { nil }
 	stmts      []Stmt
 	defer_vars []Ident
 	ifdef      string

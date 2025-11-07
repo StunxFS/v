@@ -139,6 +139,7 @@ fn (mut p Parser) for_stmt() ast.Stmt {
 				pos:          key_var_pos
 				is_tmp:       true
 				is_stack_obj: true
+				scope:        p.scope
 			})
 		} else if p.scope.known_var(val_var_name) {
 			return p.error_with_pos('redefinition of value iteration variable `${val_var_name}`, use `for (${val_var_name} in array) {` if you want to check for a condition instead',
@@ -169,6 +170,7 @@ fn (mut p Parser) for_stmt() ast.Stmt {
 				pos:          val_var_pos
 				is_tmp:       true
 				is_stack_obj: true
+				scope:        p.scope
 			})
 			if key_var_name != '' {
 				return p.error_with_pos('cannot declare index variable with range `for`',
@@ -186,6 +188,7 @@ fn (mut p Parser) for_stmt() ast.Stmt {
 				is_auto_deref: val_is_mut
 				is_tmp:        true
 				is_stack_obj:  true
+				scope:         p.scope
 			})
 		}
 		comments << p.eat_comments()

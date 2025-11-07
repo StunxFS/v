@@ -228,6 +228,7 @@ fn (mut p Parser) partial_assign_stmt(left []ast.Expr) ast.Stmt {
 						is_volatile:  is_volatile
 						pos:          lx.pos
 						is_stack_obj: p.inside_for
+						scope:        p.scope
 					}
 					if p.prev_tok.kind == .string {
 						v.typ = ast.string_type_idx

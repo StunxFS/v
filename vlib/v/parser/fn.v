@@ -552,6 +552,7 @@ run them via `v file.v` instead',
 				} else {
 					.no_comptime
 				}
+				scope:         p.scope
 			})
 		}
 	}
@@ -901,6 +902,7 @@ fn (mut p Parser) anon_fn() ast.AnonFn {
 			is_used:       true
 			is_arg:        true
 			is_stack_obj:  is_stack_obj
+			scope:         p.scope
 		})
 	}
 	mut same_line := p.tok.line_nr == p.prev_tok.line_nr

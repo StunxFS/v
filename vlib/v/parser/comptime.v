@@ -426,48 +426,54 @@ fn (mut p Parser) comptime_for() ast.ComptimeFor {
 	match for_val {
 		'params' {
 			p.scope.register(ast.Var{
-				name: val_var
-				typ:  p.table.find_type('FunctionParam')
-				pos:  var_pos
+				name:  val_var
+				typ:   p.table.find_type('FunctionParam')
+				pos:   var_pos
+				scope: p.scope
 			})
 			kind = .params
 		}
 		'methods' {
 			p.scope.register(ast.Var{
-				name: val_var
-				typ:  p.table.find_type('FunctionData')
-				pos:  var_pos
+				name:  val_var
+				typ:   p.table.find_type('FunctionData')
+				pos:   var_pos
+				scope: p.scope
 			})
 		}
 		'values' {
 			p.scope.register(ast.Var{
-				name: val_var
-				typ:  p.table.find_type('EnumData')
-				pos:  var_pos
+				name:  val_var
+				typ:   p.table.find_type('EnumData')
+				pos:   var_pos
+				scope: p.scope
 			})
 			kind = .values
 		}
 		'fields' {
 			p.scope.register(ast.Var{
-				name: val_var
-				typ:  p.table.find_type('FieldData')
-				pos:  var_pos
+				name:  val_var
+				typ:   p.table.find_type('FieldData')
+				pos:   var_pos
+				scope: p.scope
 			})
 			kind = .fields
 		}
 		'variants' {
 			p.scope.register(ast.Var{
-				name: val_var
-				typ:  p.table.find_type('VariantData')
-				pos:  var_pos
+				name:  val_var
+				typ:   p.table.find_type('VariantData')
+				pos:   var_pos
+				scope: p.scope
 			})
 			kind = .variants
 		}
 		'attributes' {
 			p.scope.register(ast.Var{
-				name: val_var
-				typ:  p.table.find_type('VAttribute')
-				pos:  var_pos
+				name:  val_var
+				typ:   p.table.find_type('VAttribute')
+				pos:   var_pos
+				scope: p.scope
 			})
 			kind = .attributes
 		}

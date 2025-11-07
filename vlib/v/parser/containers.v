@@ -273,6 +273,7 @@ fn (mut p Parser) scope_register_index() {
 		is_mut:       false
 		is_used:      false
 		is_index_var: true
+		scope:        p.scope
 	}
 	p.scope.objects['it'] = ast.Var{ // it is now deprecated, will be removed in future stable release
 		name:    'it'
@@ -280,6 +281,7 @@ fn (mut p Parser) scope_register_index() {
 		typ:     ast.int_type
 		is_mut:  false
 		is_used: false
+		scope:   p.scope
 	}
 }
 

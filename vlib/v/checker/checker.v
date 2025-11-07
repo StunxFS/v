@@ -105,7 +105,8 @@ pub mut:
 	ct_system_defines           map[string]bool
 	cur_ct_id                   int // id counter for $if $match branches
 mut:
-	stmt_level int // the nesting level inside each stmts list;
+	cur_defer_stmt ast.DeferStmt
+	stmt_level     int // the nesting level inside each stmts list;
 	// .stmt_level is used to check for `evaluated but not used` ExprStmts like `1 << 1`
 	// 1 for statements directly at each inner scope level;
 	// increases for `x := if cond { statement_list1} else {statement_list2}`;
@@ -2419,6 +2420,7 @@ fn (mut c Checker) stmt(mut node ast.Stmt) {
 
 fn (mut c Checker) defer_stmt(mut node ast.DeferStmt) {
 	c.inside_defer = true
+	c.cur_defer_stmt = node
 	if node.idx_in_fn < 0 && c.table.cur_fn != unsafe { nil } {
 		node.idx_in_fn = c.table.cur_fn.defer_stmts.len
 		c.table.cur_fn.defer_stmts << unsafe { &node }
@@ -2426,6 +2428,7 @@ fn (mut c Checker) defer_stmt(mut node ast.DeferStmt) {
 	if node.mode == .function && !isnil(c.fn_scope) && node.scope == c.fn_scope {
 		c.error('`defer` is already in function scope; just use `defer {` instead', node.pos)
 	}
+	/*
 	for i, ident in node.defer_vars {
 		mut id := ident
 		if mut id.info is ast.IdentVar {
@@ -2444,7 +2447,7 @@ fn (mut c Checker) defer_stmt(mut node ast.DeferStmt) {
 			id.info.typ = typ
 			node.defer_vars[i] = id
 		}
-	}
+	}*/
 	c.stmts(mut node.stmts)
 	c.inside_defer = false
 }
@@ -4313,6 +4316,12 @@ fn (mut c Checker) ident(mut node ast.Ident) ast.Type {
 						c.cur_or_expr = last_cur_or_expr
 						return unwrapped_typ
 					}
+					if c.inside_defer && c.cur_defer_stmt.mode == .function {
+						if obj.scope != c.fn_scope {
+							c.error('cannot use block-scoped variable `${obj.name}` inside `defer(fn) {`',
+								node.pos)
+						}
+					}
 					return typ
 				}
 				else {}
@@ -4628,6 +4637,7 @@ fn (mut c Checker) smartcast(mut expr ast.Expr, cur_type ast.Type, to_type_ ast.
 									ct_type_var:       ct_type_var
 									ct_type_unwrapped: is_ct_type_unwrapped
 									is_unwrapped:      true
+									scope:             scope
 								})
 							} else {
 								scope.update_smartcasts(expr.name, to_type, true)
@@ -4650,6 +4660,7 @@ fn (mut c Checker) smartcast(mut expr ast.Expr, cur_type ast.Type, to_type_ ast.
 					orig_type:         orig_type
 					ct_type_var:       ct_type_var
 					ct_type_unwrapped: is_ct_type_unwrapped
+					scope:             scope
 				})
 			} else if is_mut && !expr.is_mut {
 				c.smartcast_mut_pos = expr.pos

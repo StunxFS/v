@@ -59,15 +59,16 @@ fn (mut g Gen) match_expr(node ast.MatchExpr) {
 	if is_expr && !need_tmp_var {
 		g.inside_ternary++
 	}
+	mut old := false
 	if is_expr {
 		if node.return_type.has_flag(.option) {
-			old := g.inside_match_option
+			old = g.inside_match_option
 			defer(fn) {
 				g.inside_match_option = old
 			}
 			g.inside_match_option = true
 		} else if node.return_type.has_flag(.result) {
-			old := g.inside_match_result
+			old = g.inside_match_result
 			defer(fn) {
 				g.inside_match_result = old
 			}

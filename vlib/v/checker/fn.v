@@ -563,6 +563,7 @@ fn (mut c Checker) fn_decl(mut node ast.FnDecl) {
 			is_used:      true
 			is_mut:       true
 			is_stack_obj: false // true
+			scope:        c.fn_scope
 		})
 	}
 	c.stmts(mut node.stmts)
@@ -3899,6 +3900,7 @@ fn scope_register_special_var_name(mut s ast.Scope, pos token.Pos, typ ast.Type,
 		typ:        typ
 		is_used:    false
 		is_special: true
+		scope:      s
 	})
 }
 

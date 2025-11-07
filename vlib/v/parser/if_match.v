@@ -60,6 +60,7 @@ fn (mut p Parser) if_expr(is_comptime bool, is_expr bool) ast.IfExpr {
 						is_used:      false
 						is_stack_obj: true
 						is_special:   true
+						scope:        p.scope
 					})
 				}
 				if is_comptime && comptime_has_true_branch && !p.pref.is_fmt
@@ -151,6 +152,7 @@ fn (mut p Parser) if_expr(is_comptime bool, is_expr bool) ast.IfExpr {
 					is_mut: var.is_mut
 					expr:   cond
 					pos:    var.pos
+					scope:  p.scope
 				})
 			}
 			prev_guard = true
