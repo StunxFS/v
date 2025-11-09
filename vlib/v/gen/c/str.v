@@ -148,7 +148,7 @@ fn (mut g Gen) gen_expr_to_string(expr ast.Expr, etype ast.Type) {
 			} else {
 				inside_interface_deref_old := g.inside_interface_deref
 				g.inside_interface_deref = false
-				defer(fn) {
+				defer {
 					g.inside_interface_deref = inside_interface_deref_old
 				}
 				if temp_var_needed {

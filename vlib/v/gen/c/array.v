@@ -96,7 +96,7 @@ fn (mut g Gen) fixed_array_init(node ast.ArrayInit, array_type Type, var_name st
 	array_info := array_type.unaliased_sym.array_fixed_info()
 	if node.has_index {
 		past := g.past_tmp_var_from_var_name(var_name)
-		defer(fn) {
+		defer {
 			g.past_tmp_var_done(past)
 		}
 
@@ -150,7 +150,7 @@ fn (mut g Gen) fixed_array_init(node ast.ArrayInit, array_type Type, var_name st
 	if node.has_val {
 		tmp_inside_array := g.inside_array_item
 		g.inside_array_item = true
-		defer(fn) {
+		defer {
 			g.inside_array_item = tmp_inside_array
 		}
 		nelen := node.exprs.len
@@ -295,7 +295,7 @@ fn (mut g Gen) array_init_with_fields(node ast.ArrayInit, elem_type Type, is_amp
 	if node.has_index {
 		// []int{len: 6, init: index * index} when variable it is used in init expression
 		past := g.past_tmp_var_from_var_name(var_name)
-		defer(fn) {
+		defer {
 			g.past_tmp_var_done(past)
 		}
 

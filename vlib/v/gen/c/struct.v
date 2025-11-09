@@ -376,7 +376,7 @@ fn (mut g Gen) struct_init(node ast.StructInit) {
 
 		save_inside_array_fixed_struct := g.inside_array_fixed_struct
 		g.inside_array_fixed_struct = is_array_fixed_struct_init
-		defer(fn) {
+		defer {
 			g.inside_array_fixed_struct = save_inside_array_fixed_struct
 		}
 
